@@ -1,5 +1,8 @@
 import requests
 import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+
 
 
 def fetch_data(days=7):
@@ -29,6 +32,7 @@ def fetch_data(days=7):
     #formating data
     df["timestamp"] = pd.to_datetime(df["timestamp"], unit="ms")
     df["price"] = round(df["price"], 2)
+    #formatting market caps and total volumes later 
 
     return df
 
@@ -36,3 +40,10 @@ def fetch_data(days=7):
 if __name__ == "__main__":
     data = fetch_data()
     print(data)
+
+    x = np.linspace(0, 2 * np.pi, 200)
+    y = np.sin(x)
+
+    fig, ax = plt.subplots()
+    ax.plot(x, y)
+    plt.show()
