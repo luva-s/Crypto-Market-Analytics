@@ -42,6 +42,10 @@ if __name__ == "__main__":
     x = data["timestamp"]
     y = data["price"] 
 
-    fig, ax = plt.subplots()
-    ax.plot(x, y)
+    fig, ax = plt.subplots(2)
+    fig.suptitle("Crypto market analysis dashboard")
+    ax[0].plot(x, y)
+    ax[0].set_title("course developement")
+    ax[1].plot(x, -y)
+    ax[0].set_title("")
     plt.show()
