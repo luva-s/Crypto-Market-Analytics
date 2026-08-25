@@ -12,7 +12,7 @@ def fetch_data(days=7):
     params = {
         "vs_currency": "eur",
         "days": days,
-        "interval": "daily"
+        "interval": "hourly"
 
     }
 
@@ -39,7 +39,7 @@ def fetch_data(days=7):
 
 if __name__ == "__main__":
     data = fetch_data()
-    print(data)
+    print(data.head())
 
     x = np.linspace(0, 2 * np.pi, 200)
     y = np.sin(x)
