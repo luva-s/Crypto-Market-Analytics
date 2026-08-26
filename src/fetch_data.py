@@ -34,8 +34,9 @@ def fetch_data(days=7, coin="bitcoin", timegrain="hourly"):
 
     return df
 
+
 def create_charts(data):
-    fig, ax = plt.subplots(3)
+    fig, ax = plt.subplots(4)
     fig.suptitle("Crypto market analysis dashboard")
 
     #Overall course developement
@@ -50,7 +51,7 @@ def create_charts(data):
     max_course = max(data["price"])
     ax[1].text(x=0.5,
                y=0.6,
-               s= max_course,
+               s= max_course, #displayed number
                fontsize=48,
                fontweight='bold',
                ha='center',
@@ -63,7 +64,19 @@ def create_charts(data):
     min_course = min(data["price"])
     ax[2].text(x=0.5,
                y=0.6,
-               s= min_course,
+               s= min_course, #displayed number
+               fontsize=48,
+               fontweight='bold',
+               ha='center',
+               va='center',
+               color='#1f77b4',)
+
+    ax[3].set_title("Average")
+    ax[3].axis("off")
+    avg_course = round(sum(data["price"]) / len(data["price"]), 2)
+    ax[3].text(x=0.5,
+               y=0.6,
+               s= avg_course, #displayed number
                fontsize=48,
                fontweight='bold',
                ha='center',
@@ -74,5 +87,8 @@ def create_charts(data):
 
 
 if __name__ == "__main__":
-    data = fetch_data(coin="bitcoin")
-    create_charts(data)
+    try: 
+        data = fetch_data(coin="bitcoin")
+        create_charts(data)
+    except Exception: 
+        print("somethin did not work")
