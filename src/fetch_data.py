@@ -11,14 +11,17 @@ def fetch_data(days=7, coin="bitcoin", timegrain="hourly"):
         "vs_currency": "eur",
         "days": days,
         "interval": timegrain
-
     }
 
     # fetching the data
-    response = requests.get(url, params)
-    data = response.json()
+    try:
+        response = requests.get(url, params)
+        response.raise_for_status()
+    except requests.RequestException as e:
+        print(f"Error fetching data: {e}") 
 
     # loading into a data frame
+    data = response.json()
     df = pd.DataFrame(data["prices"], columns=["timestamp", "price"])
 
     # formating data
@@ -42,19 +45,22 @@ def create_charts(data):
     # highest course
     ax[1].set_title("Highest course")
     ax[1].axis("off")
-    max_course = max(data["price"])
-    ax[1].text(**style_text_card(max_course))
+    max_course = data["price"].idxmax()
+    max_course_date = data.loc[max_course, "timestamp"]
+    ax[1].text(0.5, 0.5, f"Max: {data.loc[max_course, 'price']}\n{max_course_date}", ha="center", va="center", fontsize=24, color="#1f77b4")
 
     # lowest course
     ax[2].set_title("Lowest course")
     ax[2].axis("off")
-    min_course = min(data["price"])
-    ax[2].text(**style_text_card(min_course))
+    min_course = data["price"].idxmin()
+    min_course_date = data.loc[min_course, "timestamp"]
+    print(min_course_date)
+    ax[2].text(0.5, 0.5, f"Min: {data.loc[min_course, 'price']}\n{min_course_date}", ha="center", va="center", fontsize=24, color="#1f77b4")
 
     ax[3].set_title("Average")
     ax[3].axis("off")
     avg_course = round(sum(data["price"]) / len(data["price"]), 2)
-    ax[3].text(**style_text_card(avg_course))
+    ax[3].text(0.5, 0.5, f"Avg: {avg_course}", ha="center", va="center", fontsize=24, color="#1f77b4")
 
     # daily returns in barchart
     # TODO: when time grain is set to hourly(default), still only show daily returns
@@ -64,18 +70,6 @@ def create_charts(data):
     plt.tight_layout()
     plt.show()
 
-
-def style_text_card(text):
-    return {
-        "x": 0.5,
-        "y": 0.6,
-        "s": text,  # displayed number
-        "fontsize": 48,
-        "fontweight": "bold",
-        "ha": "center",
-        "va": "center",
-        "color": "#1f77b4",
-    }
 
 
 if __name__ == "__main__":

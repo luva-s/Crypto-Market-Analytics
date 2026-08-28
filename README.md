@@ -12,7 +12,6 @@ Analysiert werden unter anderem:
 * Höchster / niedrigster Kurs
 * Tagesrenditen
 * Beste / schlechteste Tage
-* Volatilität
 * Kursentwicklung
 
 ## 🛠️ Technologien
