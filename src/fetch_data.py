@@ -19,6 +19,7 @@ def fetch_data(days=7, coin="bitcoin", timegrain="hourly"):
         response.raise_for_status()
     except requests.RequestException as e:
         print(f"Error fetching data: {e}") 
+        return
 
     # loading into a data frame
     data = response.json()
@@ -75,3 +76,4 @@ def create_charts(data):
 if __name__ == "__main__":
     data = fetch_data(coin="bitcoin")
     create_charts(data)
+
