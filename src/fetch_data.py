@@ -5,12 +5,21 @@ import matplotlib.pyplot as plt
 
 def fetch_data(days=7, coin="bitcoin", timegrain="hourly"):
 
+    # Input validation
+    if days <= 0:
+        raise ValueError("days must be a positive integer")
+    if not isinstance(coin, str) or len(coin.strip()) == 0:
+        raise ValueError("coin must be a non-empty string")
+    valid_intervals = ["hourly", "daily"]
+    if timegrain.lower() not in valid_intervals:
+        raise ValueError(f"timegrain must be one of {valid_intervals}")
+
     url = f"https://api.coingecko.com/api/v3/coins/{coin}/market_chart"
 
     params = {
         "vs_currency": "eur",
         "days": days,
-        "interval": timegrain
+        "interval": timegrain.lower()
     }
 
     # fetching the data
@@ -27,9 +36,9 @@ def fetch_data(days=7, coin="bitcoin", timegrain="hourly"):
 
     # formating data
     df["timestamp"] = pd.to_datetime(df["timestamp"], unit="ms")
-    df["price"] = round(df["price"], 2)
+    df["price"] = df["price"].round(2)
     df["daily_returns"] = df["price"].pct_change()
-    # formatting market caps and total volumes later
+    
     return df
 
 
@@ -74,6 +83,9 @@ def create_charts(data):
 
 
 if __name__ == "__main__":
-    data = fetch_data(coin="bitcoin")
-    create_charts(data)
+    try:
+        data = fetch_data(coin="bitcoin")
+        create_charts(data)
+    except ValueError as e:
+        print(f"Invalid input: {e}")
 
