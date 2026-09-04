@@ -1,4 +1,3 @@
-import pandas as pd
 from api_client import fetch_data
 from visualization import create_charts
 
